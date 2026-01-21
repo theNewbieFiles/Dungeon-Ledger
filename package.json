@@ -1,0 +1,15 @@
+{
+  "name": "dungeon-ledger",
+  "version": "1.0.0",
+  "workspaces": [
+    "src/frontend", 
+    "src/backend"
+  ],
+  "scripts": {
+     "dev": "npm run dev --workspaces",
+     "build": "npm run build --workspaces"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
