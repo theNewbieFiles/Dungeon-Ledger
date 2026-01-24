@@ -2,14 +2,17 @@
   "name": "dungeon-ledger",
   "version": "1.0.0",
   "workspaces": [
-    "src/frontend", 
+    "src/frontend",
     "src/backend"
   ],
   "scripts": {
-     "dev": "npm run dev --workspaces",
-     "build": "npm run build --workspaces"
+    "dev": "concurrently -n frontend,backend -c cyan,green \"npm run dev -w src/frontend\" \"npm run dev -w src/backend\"",
+    "build": "npm run build --workspaces"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
