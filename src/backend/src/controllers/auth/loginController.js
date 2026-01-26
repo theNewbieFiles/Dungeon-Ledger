@@ -1,8 +1,20 @@
+
+/**
+ * Controller for handling user login requests.
+ * @module controllers/auth/loginController
+ */
 import AppConfig from "../../config/appConfig.js";
 import loginService from "../../services/auth/loginService.js";
 import { mapErrorToStatus } from "../../utilities/mapErrorToStatus.js";
 
 
+/**
+ * Handles POST /auth/login requests. Validates credentials, creates session, and returns access/refresh tokens.
+ *
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @returns {Promise<void>} Sends JSON response with access token or error message.
+ */
 async function loginController(req, res) {
     try {
 

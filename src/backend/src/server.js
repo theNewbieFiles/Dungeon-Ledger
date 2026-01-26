@@ -22,7 +22,7 @@ app.use(cors({
   
 
 // REST routes
-app.use("/auth", authRoutes);
+app.use("/auth", authRoutes); //auth login, logout, refreshToken
 
 // Create HTTP server from Express app
 const server = http.createServer(app);

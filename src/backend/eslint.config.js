@@ -15,7 +15,7 @@ export default defineConfig([
         },
         rules: {
             // Add these common, stricter rules:
-            "no-console": "warn",           // Warn on console statements
+            //"no-console": "warn",           // Warn on console statements
             "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }], // Warn on unused vars
             "semi": ["error", "always"],    // Require semicolons
             "quotes": ["error", "double"],  // Double quotes

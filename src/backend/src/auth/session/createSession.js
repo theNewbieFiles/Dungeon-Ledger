@@ -1,6 +1,6 @@
 import argon2id from "argon2";
 import { generateRefreshToken } from "../refreshToken/generateRefreshToken.js";
-import { storeSession } from "../../db/storeSession.js";
+import { storeSession } from "../../db/session.js";
 import AppConfig from "../../config/appConfig.js";
 
 

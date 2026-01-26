@@ -46,4 +46,8 @@ export async function storeSession(sessionData) {
         throw new Error("Database error while storing session", { cause: JSON.stringify(err) });
     }
 } 
+
+export async function getSessionByTokenHash(tokenHash) {
+    //TODO: implement this function to retrieve session by token hash
+}; 
   

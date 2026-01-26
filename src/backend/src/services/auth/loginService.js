@@ -1,5 +1,5 @@
 import argon2id from "argon2";
-import { getUserByEmail } from "../../db/dbUser.js";
+import { getUserByEmail } from "../../db/user.js";
 import { fail, ok } from "../../utilities/message.js";
 import { loginSchema } from "../../validation/authLoginSchema.js";
 import { createSession } from "../../auth/session/createSession.js";
@@ -7,7 +7,32 @@ import { generateAccessToken } from "../../auth/accessToken/generateAccessToken.
 import errorCode from "../../utilities/errorCode.js";
 
 
+/**
+ * Authenticates a user using email and password, verifies credentials with Argon2id,
+ * and issues both an access token and a refresh session token.
+ *
+ * This function performs:
+ *  - Input validation using Zod
+ *  - User lookup by email
+ *  - Timing‑safe password verification (Argon2id)
+ *  - Refresh‑session creation (stored in DB)
+ *  - Access‑token generation (JWT)
+ *
+ * @async
+ * @function loginService
+ *
+ * @param {Object} params
+ * @param {string} params.email - The user's email address.
+ * @param {string} params.password - The plaintext password provided by the user.
+ * @param {Object} [params.session] - Metadata describing the login session.
+ * @param {string} [params.session.userAgent=""] - The client's user agent string.
+ * @param {string} [params.session.ipAddress=""] - The client's IP address.
+ *
+ * @returns {Promise<Object>} A standardized success or failure response.
+ * 
 
+ * @throws {Error} If token creation fails unexpectedly.
+ */
 async function loginService({ email, password, session = { userAgent: "", ipAddress: "" } }) {
 
     //validate input with zod
