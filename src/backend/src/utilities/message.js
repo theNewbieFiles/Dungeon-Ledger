@@ -13,7 +13,7 @@ export function fail(code, message) {
         data: null,
         error: {
             code,
-            message
-        }
+            message,
+        },
     };
 }  
