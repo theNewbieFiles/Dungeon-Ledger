@@ -39,15 +39,16 @@ async function loginController(req, res) {
                 .json({ error: result.error.message });
         }
 
-        const { accessToken, refreshToken } = result.data;
+        const { accessToken, refreshToken, sessionID } = result.data;
 
-        res.cookie("refreshToken", refreshToken, {
+        //res.cookie("accessToken", accessToken); 
+        res.cookie("refreshToken", { refreshToken, lookupID: sessionID }, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             path: "/auth",
             maxAge: 1000 * 60 * 60 * 24 * AppConfig.Token_TTL_Days,
-        });
+        }); 
 
         return res.status(200).json({
             accessToken: accessToken,

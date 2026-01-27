@@ -5,6 +5,7 @@ import { loginSchema } from "../../validation/authLoginSchema.js";
 import { createSession } from "../../auth/session/createSession.js";
 import { generateAccessToken } from "../../auth/accessToken/generateAccessToken.js";
 import errorCode from "../../utilities/errorCode.js";
+import { recordLoginEvent } from "../../db/session.js";
 
 
 /**
@@ -63,19 +64,29 @@ async function loginService({ email, password, session = { userAgent: "", ipAddr
 
     try {
         //create refresh token
-        const refreshToken = await createSession({
+        const results = await createSession({
             userId: user.id,
             userAgent: session.userAgent,
             ipAddress: session.ipAddress,
         });
+
+        if(!results.success){
+            //error
+            //TODO:
+        }
+
+        //log the login event
+        recordLoginEvent(user.id, results.data.sessionID);
+
 
         //create access token
         const accessToken = generateAccessToken(user.id);
 
         return ok({
             accessToken: accessToken,
-            refreshToken: refreshToken,
-        }); 
+            refreshToken: results.data.refreshToken,
+            sessionID: results.data.sessionID,
+        });  
 
 
     } catch (error) {

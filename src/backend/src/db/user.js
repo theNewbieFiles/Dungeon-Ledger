@@ -15,6 +15,20 @@ import pool from "./db.js";
  * @returns {Promise<import('pg').QueryResult>} The PostgreSQL query result.
  * @throws {Error} If the database query fails.
  */
-export const getUserByEmail = async (email) => {
-    return await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-};     
+// users.db.js
+export async function getUserByEmail(email) {
+    const query = `
+        SELECT id, password_hash
+        FROM users
+        WHERE email = $1;
+    `;
+
+    try {
+        return await pool.query(query, [email]);
+    } catch (err) {
+        throw new Error("Database error while retrieving user", {
+            cause: JSON.stringify(err),
+        });
+    }
+}
+     

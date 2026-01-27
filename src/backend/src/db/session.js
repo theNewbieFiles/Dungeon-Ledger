@@ -3,6 +3,7 @@
  * Database connection pool instance.
  * @module db/db
  */
+import argon2id from "argon2";
 import pool from "./db.js";
 
 
@@ -31,7 +32,8 @@ export async function storeSession(sessionData) {
 
     const query = `
         INSERT INTO sessions (user_id, token_hash, user_agent, ip_address, expires_at)
-        VALUES ($1, $2, $3, $4, $5);
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING id;
     `;
 
     const values = [userId, tokenHash, userAgent, ipAddress, expiresAt];
@@ -41,13 +43,73 @@ export async function storeSession(sessionData) {
         if (result.rowCount !== 1) {
             throw new Error("Failed to insert session into database");
         }
+        const sessionID = result.rows[0].id;
+        return sessionID;
     } catch (err) {
         // Optionally, log error details here
         throw new Error("Database error while storing session", { cause: JSON.stringify(err) });
     }
 } 
 
-export async function getSessionByTokenHash(tokenHash) {
-    //TODO: implement this function to retrieve session by token hash
+export async function getSessionTokenByID(id) {
+    const query = `
+        SELECT user_id, token_hash
+        FROM sessions
+        WHERE id = $1 AND revoked_at IS NULL;
+    `;
+
+    try {
+        return await pool.query(query, [id]);
+
+    } catch (err) {
+        console.error("DB error:", err); 
+        throw new Error("Database error while retrieving session");
+    }
 }; 
+
+export async function invalidateSession(id) {
+    const query = `
+        UPDATE sessions 
+        SET revoked_at = NOW()
+        WHERE id = $1 AND revoked_at IS NULL;
+    `; 
+    try {
+        return await pool.query(query, [id]);
+
+    } catch (err) { 
+        console.error("DB error:", err); 
+        throw new Error("Database error while invalidating session");
+    }
+}
   
+export async function recordLoginEvent(userID, sessionId = null) {
+    const query = `
+        INSERT INTO login_events (user_id, session_id, event_type, created_at)
+        VALUES ($1, $2, 'login', NOW());
+    `;
+
+    //console.log(userId, sessionId);
+
+    try {
+        await pool.query(query, [userID, sessionId]);
+    } catch (err) {
+        throw new Error("Database error while recording login event", { 
+            cause: JSON.stringify(err),
+        });
+    }
+}
+
+export async function recordLogoutEvent(userID, sessionId = null) {
+    const query = `
+        INSERT INTO login_events (user_id, session_id, event_type, created_at)
+        VALUES ($1, $2, 'logout', NOW());
+    `;
+
+    try {
+        await pool.query(query, [userID, sessionId]);
+    } catch (err) {
+        throw new Error("Database error while recording logout event", { 
+            cause: JSON.stringify(err),
+        });
+    }
+}

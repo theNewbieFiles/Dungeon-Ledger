@@ -4,22 +4,28 @@ import http from "http";
 import { WebSocketServer } from "ws";
 import authRoutes from "./routes/auth/authRoutes.js";
 import cors from "cors";
+import cookieParser from "cookie-parser"
+import { requestLogger } from "./middleware/requestLogger.js";
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(express.json());
+
 
 // Enable CORS for frontend
 app.use(cors({
     origin: "http://localhost:5173", // frontend origin
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    //methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // allow cookies if needed
 }));
 
-  
+app.use(express.json());
+
+app.use(cookieParser());
+
+app.use(requestLogger); 
 
 // REST routes
 app.use("/auth", authRoutes); //auth login, logout, refreshToken

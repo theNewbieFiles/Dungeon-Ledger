@@ -15,6 +15,7 @@ function App() {
   return (
     <>
       <Dummy />
+      <Dummy2 />
     </>
   )
 }
@@ -29,6 +30,20 @@ function Dummy() {
   return (
     <button onClick={() => publish(Events.Auth.Login_req, { email: "gravy@chrispcr.com", password: "secret1234"})}>
       Publish Test Event
+    </button>
+  );
+}
+
+function Dummy2() {
+  UseSubscribe("logout", (payload) => {
+    console.log("Test event received", payload);
+  });
+
+  const publish = usePublish();
+
+  return (
+    <button onClick={() => publish(Events.Auth.logout_req)}>
+      logout
     </button>
   );
 }

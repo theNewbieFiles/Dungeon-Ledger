@@ -1,6 +1,6 @@
 const appConfig = {
     //token data
-    Token_TTL_Days: 30, // the number of days until a refresh token expires
+    Token_TTL_Days: 7, // the number of days until a refresh token expires
     
     Refresh_Token_Length: 64, // length in bytes of the refresh token
     
