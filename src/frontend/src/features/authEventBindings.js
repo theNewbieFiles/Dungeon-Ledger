@@ -1,5 +1,5 @@
 import { Events } from "../utility/Events.js";
-import { eventBus } from "./eventBus.js";
+import { eventBus } from "../app/core/eventBus.js";
 
 
 export function bindAuthEvents() {
@@ -16,6 +16,7 @@ export function bindAuthEvents() {
             async (response) => {
                 const data = await response.json();
                 console.log(data);
+                eventBus.publish("logged_in"); 
             }
         );
     });
@@ -24,10 +25,6 @@ export function bindAuthEvents() {
         fetch("http://localhost:3000/auth/logoff", {
             method: "POST",
             credentials: "include"
-        }).then(async (response) => {
-            const data = await response.json();
-
-            console.log("logout: ", data);
         });
     })
 }
