@@ -1,13 +1,13 @@
-import { eventBus } from "./eventBus.js";
+import { EventBus } from "../../../../shared/createEventBus.js";
 
-export type AuthStatus = "unknown" | "authenticated" | "unauthenticated";
+export type AuthStatus = "unknown" | "authenticated" | "unauthenticated" | "expired" | "error";
 
 export interface AuthState {
     status: AuthStatus;
 }
 
 
-export function createAuth() {
+export function createAuth(eventBus: EventBus) {
     const state: AuthState = {
         status: "unknown"
     };
@@ -17,7 +17,7 @@ export function createAuth() {
     }
 
     function checkSession(): void{
-        
+         
         state.status = "authenticated";
         eventBus.publish("auth:state-changed");
     }

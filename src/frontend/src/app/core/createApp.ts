@@ -1,11 +1,13 @@
-import { EventBus } from "../../../../shared/createEventBus.js";
-import { eventBus } from "./eventBus.js";
+import { createEventBus, EventBus } from "../../../../shared/createEventBus.js";
 import { Auth, createAuth } from "./createAuth.js";
 
 
 export function createApp() {
 
-    const auth = createAuth();
+    //create event bus
+    const eventBus: EventBus = createEventBus(); 
+
+    const auth = createAuth(eventBus);
 
     function init() {
         

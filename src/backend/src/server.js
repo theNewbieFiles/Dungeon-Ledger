@@ -4,7 +4,7 @@ import http from "http";
 import { WebSocketServer } from "ws";
 import authRoutes from "./routes/auth/authRoutes.js";
 import cors from "cors";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 import { requestLogger } from "./middleware/requestLogger.js";
 
 
