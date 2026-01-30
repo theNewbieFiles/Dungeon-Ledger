@@ -1,5 +1,5 @@
 import { createEventBus, EventBus } from "../../../../shared/createEventBus.js";
-import { Auth, createAuth } from "./createAuth.js";
+import { IAuthSystem, createAuthSystem } from "./createAuthSystem.js";
 
 
 export function createApp() {
@@ -7,21 +7,24 @@ export function createApp() {
     //create event bus
     const eventBus: EventBus = createEventBus(); 
 
-    const auth = createAuth(eventBus);
+
+    const authSys = createAuthSystem(eventBus);
 
     function init() {
+        
+        authSys.checkSession(); 
         
     }
 
     return {
         eventBus,
-        auth,
+        authSys,
         init,
     }
 }
 
 export interface App {
     eventBus: EventBus; 
-    auth: Auth;
+    authSys: IAuthSystem;
     init: () => void;
 }

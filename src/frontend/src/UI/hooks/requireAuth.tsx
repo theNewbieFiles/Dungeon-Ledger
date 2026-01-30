@@ -1,3 +1,4 @@
+import { BackendDown } from "../components/pages/BackendDown";
 import { Homepage } from "../components/pages/Homepage";
 import { Loading } from "../components/pages/Loading";
 import { SessionExpiredOverlay } from "../components/SessionExpiredOverlay";
@@ -11,9 +12,9 @@ export function RequireAuth() {
   const location = useLocation();
 
 
-  if (authState === "unknown") {
-    return <Loading />;
-  }
+  if (authState === "unknown") return <Loading />;
+
+  if (authState === "error") return <BackendDown />;
 
   if (authState === "unauthenticated") {
     return (
