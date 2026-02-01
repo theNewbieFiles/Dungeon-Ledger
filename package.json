@@ -3,16 +3,23 @@
   "version": "1.0.0",
   "workspaces": [
     "src/frontend",
-    "src/backend"
+    "src/backend", 
+    "src/shared"
   ],
   "scripts": {
-    "dev": "concurrently -n frontend,backend -c cyan,green \"npm run dev -w src/frontend\" \"npm run dev -w src/backend\"",
-    "build": "npm run build --workspaces"
+    "dev:types": "npx tsc -b --watch",
+    "dev:backend": "npm run dev -w src/backend",
+    "dev:frontend": "npm run dev -w src/frontend",
+    "dev": "concurrently -n types,backend,frontend -c yellow,green,cyan \"npm run dev:types\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "tsc -b src/shared src/backend src/frontend"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.3"
   }
 }
+
+

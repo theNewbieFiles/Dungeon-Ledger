@@ -1,0 +1,9 @@
+{
+    "apiBaseUrl": "localhost:3000", 
+    "websocketUrl": "", 
+    "maxRetryCount": 3, 
+    "requestTimeoutMs": 100, 
+    "enableDebugLogs": false,
+    "secured": false
+    
+}

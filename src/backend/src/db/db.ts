@@ -1,7 +1,6 @@
 
-import env from "../config/env.js";
-import pkg from "pg";
-const { Pool } = pkg;
+import env from "../config/env.js";  //js is here
+import { Pool } from "pg";
 
 const pool = new Pool({
     user: env.USER,

@@ -1,11 +1,11 @@
 import z from "zod";
 
-export function createSystemSettings(rawSettings: ISettings) {
+export function createSystemSettings(rawSettings: ISettings): ISystemSettings {
     const schema = z.object({
-        apiBaseUrl: z.url(),
-        websocketUrl: z.url(),
-        maxRetryCount: z.int().min(0),
-        requestTimeoutMs: z.int().min(100),
+        apiBaseUrl: z.string(),
+        websocketUrl: z.string(),
+        maxRetryCount: z.int(),
+        requestTimeoutMs: z.int(),
         enableDebugLogs: z.boolean(),
         secured: z.boolean(), 
     });
@@ -14,10 +14,13 @@ export function createSystemSettings(rawSettings: ISettings) {
 
     try {
         settings = schema.parse(rawSettings);
-    } catch (error) { }
+    } catch (error) { 
+        console.error(error); 
+        //throw new Error("Failed Validation")
+     }
 
     //get a setting
-    function get<K extends keyof ISettings>(key: K): ISettings[K] | undefined {
+    function get<K extends keyof ISettings>(key: K): ISettings[K] {
         return settings?.[key];
     }
 

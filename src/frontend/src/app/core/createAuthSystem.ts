@@ -1,4 +1,6 @@
-import { EventBus } from "../../../../shared/createEventBus.js";
+import { EventBus } from "../../../../shared/src/createEventBus.js";
+import { Events } from "../utilities/events.js";
+import { IAPIRequest } from "./APIRequest.js";
 
 export type AuthStatus =
     | "unknown"
@@ -11,54 +13,85 @@ export interface IAuthState {
     status: AuthStatus;
 }
 
-export function createAuthSystem(eventBus: EventBus): IAuthSystem {
+export function createAuthSystem(
+    eventBus: EventBus,
+    APIGateway: IAPIRequest,
+): IAuthSystem {
+
     const state: IAuthState = {
         status: "unknown",
     };
 
-    eventBus.subscribe()
-
-    function setUnAuth() {
-        if(state.status === 'authenticated'){
-            state.status = "expired"
-        }
-
-        state.status = "unauthenticated"; 
-
-        eventBus.publish()
+    eventBus.subscribe(Events.AUTH_REFRESH_TOKEN_EXPIRED, () => {
         
-    }
+        switch (state.status) {
+            case "authenticated":
+                state.status = "expired";
+                break;
+            case "unknown":
+                state.status = "unauthenticated";
+                break;
+
+            default:
+                state.status = "unauthenticated";
+                break;
+        }
+    });
 
     function getStatus(): AuthStatus {
         return state.status;
     }
 
-    function checkSession(): void {
-        setTimeout(() => {
-            console.log("here"); 
-            state.status = "unauthenticated";
-            eventBus.publish("auth:state-changed");
-        }, 1000);
+    async function checkSession(): Promise<void> {
+         
     }
 
-    async function login(username: string, password: string): Promise<void> {
-        eventBus.publish("auth:login-started");
+    function getAccessCookie(){
+        
+    }
+
+    eventBus.subscribe(Events.AUTH_LOGIN_SUCCEEDED, () => {
+        
+            //set state
+            state.status = "authenticated";
+            eventBus.publish(Events.AUTH_STATE_CHANGED, state.status);
+    });
+
+    eventBus.subscribe(Events.AUTH_LOGIN_FAILED, (err) => {
+        
+            //set state
+            state.status = "unauthenticated";
+            eventBus.publish(Events.AUTH_STATE_CHANGED, state.status);
+    });
+
+    async function login(email: string, password: string): Promise<void> {
+        eventBus.publish(Events.AUTH_LOGIN_STARTED);
 
         try {
-            const res = await fetch("/auth/login", {
+            const response = await APIGateway.request({
                 method: "POST",
-                body: JSON.stringify({ username, password }),
+                endpoint: "/auth/login",
+                data: {
+                    email,
+                    password,
+                },
             });
 
-            if (!res.ok) throw new Error("Login failed");
+            if (!response?.accessToken) {
+                throw new Error("No Token");
+            }
 
-            state.status = "authenticated";
-            eventBus.publish("auth:state-changed", state.status);
-            eventBus.publish("auth:login-succeeded");
+            //set token
+            APIGateway.setAccessToken(response.accessToken);
+
+            //let everyone know
+            eventBus.publish(Events.AUTH_ACCESS_TOKEN_RENEWED); 
+
+            //let everyone know login succeeded 
+            eventBus.publish(Events.AUTH_LOGIN_SUCCEEDED);
         } catch (err) {
             state.status = "unauthenticated";
-            eventBus.publish("auth:state-changed", state.status);
-            eventBus.publish("auth:login-failed", err);
+            eventBus.publish(Events.AUTH_LOGIN_FAILED, err);
         }
     }
 

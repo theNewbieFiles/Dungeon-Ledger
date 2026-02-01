@@ -1,7 +1,7 @@
-import { EventBus } from "../../../../shared/createEventBus";
+import { EventBus } from "../../../../shared/src/createEventBus";
 import { Events } from "../utilities/events";
 import { ISystemSettings } from "../utilities/systemSettings";
-
+import { sharedErrors } from "../../../../shared/src/sharedErrors"
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 interface ApiRequest {
@@ -24,11 +24,11 @@ interface PendingRequest {
 type FetchFunction = typeof fetch;
 
 
-export async function createAPIRequest(
+export function createAPIRequest(
     settings: ISystemSettings,
     eventBus: EventBus,
     fetchFn: FetchFunction = fetch
-) {
+): IAPIRequest {
     const protocol = settings.get("secured") ? "https" : "http";
 
     const requestQueue: PendingRequest[] = [];
@@ -101,7 +101,7 @@ export async function createAPIRequest(
 
             if (!response.ok) {
                 //try again in a few seconds
-                const nextTry = tries + 1; 
+                const nextTry = tries + 1;
                 setTimeout(() => requestRefreshToken(nextTry), 1000 * nextTry);
                 return;
             }
@@ -122,6 +122,7 @@ export async function createAPIRequest(
             throw new Error("Invariant violation: empty access token");
         }
         accessToken = token;
+
     }
 
     function request<T = any>(config: ApiRequest): Promise<T> {
@@ -171,19 +172,33 @@ export async function createAPIRequest(
                 },
             );
 
-            if (response.status === 401) {
-                //access token expired
+            let data = null;
+            try {
+                data = await response.json();
+            } catch {
+                data = null;
+            }
 
-                if (pending.hasRetriedAfterRefresh) {
-                    pending.reject("Authentication failed after refresh");
-                    return
+            if (response.status === 401) {
+                if (data?.error === sharedErrors.ACCESS_TOKEN_INVALID) {
+                    if (pending.hasRetriedAfterRefresh) {
+                        pending.reject("Authentication failed after refresh");
+                        return
+                    }
+
+                    pending.hasRetriedAfterRefresh = true; 1
+                    queueRequest(pending);
+
+                    eventBus.publish(Events.AUTH_ACCESS_TOKEN_EXPIRED);
+                    return;
                 }
 
-                pending.hasRetriedAfterRefresh = true;
-                queueRequest(pending);
+                if(data?.error === sharedErrors.REFRESH_TOKEN_INVALID) {
+                    eventBus.publish(Events.AUTH_REFRESH_TOKEN_EXPIRED);
+                    pending.reject("Refresh token invalid");
+                    return;
+                }
 
-                eventBus.publish(Events.AUTH_ACCESS_TOKEN_EXPIRED);
-                return;
             }
 
             if (!response.ok) {
@@ -203,12 +218,7 @@ export async function createAPIRequest(
                 }
             }
 
-            let data = null;
-            try {
-                data = await response.json();
-            } catch {
-                data = null;
-            }
+
 
             pending.resolve(data);
         } catch (error) {
@@ -254,15 +264,15 @@ export async function createAPIRequest(
 
         //let execute own resolve/reject
         queueCopy.forEach(p => executeRequest(p));
-
-        // await Promise.all(
-        //     queueCopy.map((pending) =>
-        //         executeRequest(pending).catch((err) => pending.reject(err)),
-        //     ),
-        // );
     }
 
     return {
+        setAccessToken,
         request,
     };
+}
+
+export interface IAPIRequest {
+    setAccessToken(token: string): void;
+    request<T = any>(config: ApiRequest): Promise<T>;
 }

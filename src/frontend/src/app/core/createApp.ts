@@ -1,30 +1,45 @@
-import { createEventBus, EventBus } from "../../../../shared/createEventBus.js";
+import { createEventBus, EventBus } from "../../../../shared/src/createEventBus.js";
+import { createSystemSettings } from "../utilities/systemSettings.js";
+import { createAPIRequest } from "./APIRequest.js";
 import { IAuthSystem, createAuthSystem } from "./createAuthSystem.js";
 
-
-export function createApp() {
-
-    //create event bus
-    const eventBus: EventBus = createEventBus(); 
-
-
-    const authSys = createAuthSystem(eventBus);
-
-    function init() {
+export async function createApp(): Promise<App> {
+    try {
+        //load settings
+        const config = await fetch("/config.json").then((r) => r.json());
         
-        authSys.checkSession(); 
-        
+
+        const settings = createSystemSettings(config);
+
+        //create event bus
+        const eventBus: EventBus = createEventBus();
+
+        //create API gateway
+        const APIGateway = createAPIRequest(settings, eventBus);
+
+        const authSys = createAuthSystem(eventBus, APIGateway);
+
+        function init() {
+            authSys.login("gravy@chrispcr.com", "secret123");
+        }
+
+        return {
+            eventBus,
+            authSys,
+            init,
+        };
+
+
+    } catch (error) {
+        console.error(error);
+        throw error; 
     }
 
-    return {
-        eventBus,
-        authSys,
-        init,
-    }
+
 }
 
 export interface App {
-    eventBus: EventBus; 
+    eventBus: EventBus;
     authSys: IAuthSystem;
     init: () => void;
 }
