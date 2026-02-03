@@ -1,6 +1,5 @@
 import { invalidateSession, recordLogoutEvent } from "../../db/session.js";
 import { fail, ok } from "../../utilities/message.js";
-import { errorCode } from "../../utilities/errorCode.js";
 import logger from "../../utilities/logger.js";
 import { verifySessionToken } from "../../utilities/verifySessionToken.js";
 import type { Result } from "../../utilities/message.js";

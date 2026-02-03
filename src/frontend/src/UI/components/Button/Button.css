@@ -1,0 +1,84 @@
+/* button.css */
+.btn {
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-button);
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast),
+              background var(--transition-fast),
+              opacity var(--transition-fast);
+}
+
+.btn:hover{
+  filter: brightness(50%);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Variants */
+
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--text-on-primary);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--text-on-secondary);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--color-secondary-hover);
+}
+
+.btn--danger {
+  background: var(--color-danger);
+  color: white;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--color-danger-hover);
+}
+
+/* Sizes */
+
+.btn--sm {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.btn--md {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.btn--lg {
+  padding: 14px 18px;
+  font-size: 1.1rem;
+}
+
+/* Loading spinner */
+
+.btn__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

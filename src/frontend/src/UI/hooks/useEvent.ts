@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { app } from "../../app"
-import { EventMeta } from "../../../../shared/createEventBus";
+import dl from "../../app/index.js";
+import { EventMeta } from "@dungeon-ledger/shared";
 
 
 export function useEvent<T = any>(
@@ -16,7 +16,7 @@ export function useEvent<T = any>(
     }, [callback]);
 
     useEffect(() => {
-        const unsubscribe = app.eventBus.subscribe<T>(topic, (payload, info) => {
+        const unsubscribe = dl.eventBus.subscribe<T>(topic, (payload, info) => {
             callbackRef.current(payload, info);
         });
 

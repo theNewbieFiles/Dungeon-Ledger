@@ -71,8 +71,6 @@ async function loginService(params: loginServiceParams) {
     //create access token
     const accessToken = generateAccessToken(id);
 
-    console.log(verifyAccessToken(accessToken));
-
     return ok({
         accessToken: accessToken,
         refreshToken: refreshToken,

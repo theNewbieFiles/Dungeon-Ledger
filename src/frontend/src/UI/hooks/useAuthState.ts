@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { app } from "../../app";
+import DungeonLedger from "../../app/index";
 import { useEvent } from "./useEvent";
-import type { AuthStatus } from "../../app/core/createAuthSystem"
+import type { AuthStatus } from "../../app/core/AuthSystem"
 import { Events } from "../../app/utilities/events";
 
 export function useAuthState(): AuthStatus {
-    const [state, setState] = useState(app.authSys.getStatus()); 
+    const [state, setState] = useState(DungeonLedger.authSystem.getStatus()); 
 
     useEvent(Events.AUTH_STATE_CHANGED, () => {
        
-        setState(app.authSys.getStatus()); 
+        setState(DungeonLedger.authSystem.getStatus()); 
     }); 
 
     return state; 

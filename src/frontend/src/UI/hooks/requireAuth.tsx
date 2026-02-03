@@ -1,6 +1,5 @@
-import { BackendDown } from "../components/pages/BackendDown";
-import { Homepage } from "../components/pages/Homepage";
-import { Loading } from "../components/pages/Loading";
+import { BackendDown } from "../components/Pages/BackendDown";
+import { Loading } from "../components/Pages/Loading";
 import { SessionExpiredOverlay } from "../components/SessionExpiredOverlay";
 import { useAuthState } from "./useAuthState";
 import { Navigate, useLocation } from "react-router-dom"; 

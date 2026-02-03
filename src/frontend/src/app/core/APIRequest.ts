@@ -125,6 +125,10 @@ export function createAPIRequest(
 
     }
 
+    function clearAccessToken() {
+        accessToken = "";
+    }
+
     function request<T = any>(config: ApiRequest): Promise<T> {
 
         if (backendDown) {
@@ -178,25 +182,25 @@ export function createAPIRequest(
             } catch {
                 data = null;
             }
-
+   
             if (response.status === 401) {
-                if (data?.error === sharedErrors.ACCESS_TOKEN_INVALID) {
-                    if (pending.hasRetriedAfterRefresh) {
-                        pending.reject("Authentication failed after refresh");
-                        return
-                    }
+                switch (data?.error) {
+                    
+                    case sharedErrors.ACCESS_TOKEN_INVALID:
+                        if (pending.hasRetriedAfterRefresh) {
+                            pending.reject("Authentication failed after refresh");
+                            return
+                        }
+                        pending.hasRetriedAfterRefresh = true; 1
+                        queueRequest(pending);
 
-                    pending.hasRetriedAfterRefresh = true; 1
-                    queueRequest(pending);
+                        eventBus.publish(Events.AUTH_ACCESS_TOKEN_EXPIRED);
+                        return;
 
-                    eventBus.publish(Events.AUTH_ACCESS_TOKEN_EXPIRED);
-                    return;
-                }
-
-                if(data?.error === sharedErrors.REFRESH_TOKEN_INVALID) {
-                    eventBus.publish(Events.AUTH_REFRESH_TOKEN_EXPIRED);
-                    pending.reject("Refresh token invalid");
-                    return;
+                    case sharedErrors.REFRESH_TOKEN_INVALID:
+                        eventBus.publish(Events.AUTH_REFRESH_TOKEN_EXPIRED);
+                        pending.reject("Refresh token invalid");
+                        return;
                 }
 
             }
@@ -268,11 +272,13 @@ export function createAPIRequest(
 
     return {
         setAccessToken,
+        clearAccessToken,
         request,
     };
 }
 
 export interface IAPIRequest {
     setAccessToken(token: string): void;
+    clearAccessToken(): void;
     request<T = any>(config: ApiRequest): Promise<T>;
 }

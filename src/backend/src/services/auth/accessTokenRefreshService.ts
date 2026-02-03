@@ -5,6 +5,7 @@ import { verifySessionToken } from "../../utilities/verifySessionToken.js";
 
 
 export async function accessTokenRefreshService(sessionID: string, refreshToken: string): Promise<Result<string>> {
+    
     //Lookup the session db
     const verification  = await verifySessionToken(sessionID, refreshToken);
 
@@ -13,7 +14,7 @@ export async function accessTokenRefreshService(sessionID: string, refreshToken:
     }
 
     // Successfully verified session
-
+    //get user id from verification
     const userID = verification.data.user_id;
 
     //generate new access token

@@ -1,7 +1,7 @@
 import logoutService from "../../services/auth/logoutService.js";
 import type { Request, Response } from 'express';
 import logger from "../../utilities/logger.js";
-import { lookup } from "node:dns";
+
 
 async function logoutController(req: Request, res: Response) {
     try {

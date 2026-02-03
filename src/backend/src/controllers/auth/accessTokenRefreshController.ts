@@ -9,7 +9,8 @@ export async function accessTokenRefreshController(req: Request, res: Response) 
 
     //check cookie signature
     if (!cookie || !cookie.lookupID || !cookie.refreshToken) {
-        return res.status(401).end();
+        
+        return res.status(401).json({ error: sharedErrors.REFRESH_TOKEN_INVALID });
     }
 
     try {
@@ -26,4 +27,4 @@ export async function accessTokenRefreshController(req: Request, res: Response) 
         logger.error({ err: error }, "Error refreshing access token");
         return res.status(500).end();
     }
-}
+}   

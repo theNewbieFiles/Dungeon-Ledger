@@ -1,6 +1,9 @@
-import { App, createApp } from "./core/createApp.js";
+import { DungeonLedger } from "./core/DungeonLedger.js";
 
 //since its async it returns a promise (Promise<App>)
 //so I have to treat as if it is a promise. 
-export const app = await createApp(); 
-app.init(); 
+const dl = await DungeonLedger();
+ 
+dl.init(); 
+
+export default dl;

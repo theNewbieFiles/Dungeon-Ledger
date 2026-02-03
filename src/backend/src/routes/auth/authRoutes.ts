@@ -16,7 +16,7 @@ router.post("/login", loginController);
  * Refresh the access token using the refresh token cookie
  * POST /refresh
  */
-router.post("/refresh", accessTokenRefreshController);
+router.get("/refresh", accessTokenRefreshController);
 
 
 /**

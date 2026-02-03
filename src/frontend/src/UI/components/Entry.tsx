@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
 import { RequireAuth } from "../hooks/requireAuth";
 import { useAuthState } from "../hooks/useAuthState";
-import { Dashboard } from "./pages/Dashboard";
-import { Homepage } from "./pages/Homepage";
-import { Loading } from "./pages/Loading";
-import { BackendDown } from "./pages/BackendDown";
+import { Dashboard } from "./Pages/Dashboard/Dashboard";
+import { LandingPage } from "./Pages/LandingPage/LandingPage";
+import { Loading } from "./Pages/Loading";
+import { BackendDown } from "./Pages/BackendDown";
 
 export function Entry() {
   const authState = useAuthState();
@@ -16,7 +16,7 @@ export function Entry() {
   }
 
   if (authState === "unauthenticated") {
-    return <Homepage />;
+    return <LandingPage />;
   }
 
   if (authState === "error") {

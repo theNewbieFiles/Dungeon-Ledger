@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom";
 import { useAuthState } from "../../hooks/useAuthState";
+import { LoginForm } from "../Login/Login";
 
 
-export function Login() {
+export function LoginPage() {
     const authState = useAuthState();
 
     //if user is already logged in redirect to home page. 
@@ -12,7 +13,7 @@ export function Login() {
 
     return (
         <>
-            login
+            <LoginForm />
         </>
     )
 }

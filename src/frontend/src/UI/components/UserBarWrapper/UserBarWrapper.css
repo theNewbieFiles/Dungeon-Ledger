@@ -1,0 +1,32 @@
+.userbar-container {
+    width: 100%; 
+    border-bottom: 1px solid #252525;
+}
+
+.userbar {
+    background: #252525;     
+    height: 64px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 0 16px; 
+}
+
+.userbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.userbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+} 

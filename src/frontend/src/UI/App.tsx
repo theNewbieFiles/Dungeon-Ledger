@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { app } from "../app";
-import type { AuthStatus } from "../app/core/createAuthSystem";
+import dungeonLedger  from "../app/index"; //not needed but this initializes the app.
 import "./App.css";
-import { useAuthState } from "./hooks/useAuthState";
-import { Homepage } from "./components/pages/Homepage";
-import { Login } from "./components/pages/Login";
+import { LoginPage } from "./components/Pages/LoginPage";
 import { Signup } from "./components/pages/Signup";
 import { RequireAuth } from "./hooks/requireAuth";
-import { Dashboard } from "./components/pages/Dashboard";
-import { NotFound } from "./components/pages/NotFound";
+import { Dashboard } from "./components/Pages/Dashboard/Dashboard";
+import { NotFound } from "./components/Pages/NotFound";
 import { Entry } from "./components/Entry";
 
+
 function App() {
+  //setup 
+  document.title = "Dungeon Ledger"; 
 
   return (
     <BrowserRouter>
@@ -27,15 +27,13 @@ function App() {
         </Route>
 
         {/* Public routes */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
 
   );
-
-
 }
 
 
