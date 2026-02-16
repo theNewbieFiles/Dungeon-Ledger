@@ -1,18 +1,27 @@
 import { Button } from "../Button/Button";
 import { Logo } from "../logo/Logo";
-import "./Auth-UserMenu.css";
+import "./UserMenu-Auth.css";
 
-import dungeonLedger from "../../../app/index";
+import {DungeonLedger} from "../../../app/index";
+import { CampaignMenu } from "../megaMenu/campaignMenu/CampaignMenu";
+import { CharacterMenu } from "../megaMenu/characterMenu/CharacterMenu";
+
 
 export function AuthUserMenu() {
+  const dungeonLedger = DungeonLedger.get();
+
   const logoffBtnHandler = () => {
-    dungeonLedger.authSystem.logoff();
+    dungeonLedger.getAuthSystem().logoff();
   };
 
   return (
     <div className="userbar auth-menu">
       <div className="userbar-left">
         <Logo />
+
+        <CampaignMenu />
+
+        <CharacterMenu />
       </div>
 
       <div className="userbar-right">

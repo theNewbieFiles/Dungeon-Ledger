@@ -5,8 +5,10 @@
   "type": "module",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "nodemon --inspect dist/server.js", 
-    "build": "tsc"
+    "dev-db": "nodemon --inspect dist/server.js", 
+    "dev": "nodemon dist/server.js", 
+    "build": "tsc", 
+    "watch": "npx tsc -b --watch"
   },
   "author": "",
   "license": "ISC",

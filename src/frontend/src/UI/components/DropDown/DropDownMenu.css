@@ -1,0 +1,36 @@
+.dropdown {
+    height: 100%;
+}
+
+.dropdown:hover {
+    cursor: pointer;
+    background-color: #333;
+}
+
+.dropdown-trigger {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    color: rgb(189, 189, 189);                   
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100vw;
+    background: #1e1e1e;
+    border-bottom: 1px solid #333;
+    padding: 24px 0;
+    z-index: 999;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 16px;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}

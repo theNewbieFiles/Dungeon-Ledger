@@ -4,10 +4,8 @@ import { fail, ok } from "../../utilities/message.js";
 import { loginSchema } from "../../validation/authLoginSchema.js";
 import { createSession } from "../../auth/session/createSession.js";
 import { generateAccessToken } from "../../auth/accessToken/generateAccessToken.js";
-
 import { recordLoginEvent } from "../../db/session.js";
-import { verifyAccessToken } from "../../auth/accessToken/verifyAccessToken.js";
-
+import logger from "../../utilities/logger.js";
 
 export interface loginServiceParams {
     email: string;
@@ -64,12 +62,18 @@ async function loginService(params: loginServiceParams) {
 
     const { refreshToken, sessionID } = sessionResults.data; 
 
-    //log the login event
-    recordLoginEvent(id, sessionID);
-
-
     //create access token
     const accessToken = generateAccessToken(id);
+    
+    
+    //log the login event
+    try {
+        await recordLoginEvent(id, sessionID);
+    } catch (error) {
+        //failure here shouldn't block login
+        logger.error({ sessionID }, "Failed to record login event");
+        console.error("Failed to record login event:", error);
+    }
 
     return ok({
         accessToken: accessToken,

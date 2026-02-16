@@ -2,29 +2,45 @@ import js from "@eslint/js";
 import globals from "globals";
 import { defineConfig } from "eslint/config";
 
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
+
 export default defineConfig([
-    {
-        files: ["**/*.{js,mjs,cjs}"],
-        plugins: { js },
-        extends: ["js/recommended"],
-        languageOptions: { 
-            globals: {
-                ...globals.node,
-                ...globals.es2021,
-            },
-        },
-        rules: {
-            // Add these common, stricter rules:
-            //"no-console": "warn",           // Warn on console statements
-            "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }], // Warn on unused vars
-            "semi": ["error", "always"],    // Require semicolons
-            "quotes": ["error", "double"],  // Double quotes
-            "indent": ["error", 4],         // 4-space indentation
-            "comma-dangle": ["error", "always-multiline"], // Trailing commas
-            "prefer-const": "error",        // Prefer const over let
-            "arrow-parens": ["error", "always"], // Always use parens in arrow functions
-            "object-curly-spacing": ["error", "always"], // Spaces inside braces
-            "array-bracket-spacing": ["error", "never"], // No spaces in array brackets
-        },
+  // --- JS + shared rules ---
+  {
+    files: ["**/*.{js,mjs,cjs,ts,tsx}"],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
     },
+    rules: {
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      semi: ["error", "always"],
+      quotes: ["error", "double"],
+      indent: ["error", 4],
+      "comma-dangle": ["error", "always-multiline"],
+      "prefer-const": "error",
+      "arrow-parens": ["error", "always"],
+      "object-curly-spacing": ["error", "always"],
+      "array-bracket-spacing": ["error", "never"],
+    },
+  },
+
+  // --- TypeScript override (this is where parserOptions goes) ---
+  {
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint,
+    },
+    extends: [tseslint.configs.recommended],
+  },
 ]);

@@ -1,25 +1,35 @@
 import { Navigate } from "react-router-dom";
-import { RequireAuth } from "../hooks/requireAuth";
-import { useAuthState } from "../hooks/useAuthState";
-import { Dashboard } from "./Pages/Dashboard/Dashboard";
 import { LandingPage } from "./Pages/LandingPage/LandingPage";
 import { Loading } from "./Pages/Loading";
 import { BackendDown } from "./Pages/BackendDown";
+import { DungeonLedger } from "../../app";
+import { useState } from "react";
+import { useEvent } from "../hooks/useEvent";
+import { Events } from "../../utility/Events";
 
 export function Entry() {
-  const authState = useAuthState();
+  const dl = DungeonLedger.get();
 
-  if (authState === "unknown") return <Loading />;
+  const [state, setState] = useState(dl.getAuthSystem().getStatus());
 
-  if (authState === "authenticated") {
+  useEvent(Events.AUTH_STATE_CHANGED, () => {
+     setState(dl.getAuthSystem().getStatus());
+
+  }); 
+
+  
+
+  if (state === "unknown") return <Loading />;
+
+  if (state === "authenticated") {
     return <Navigate to="/home" replace />;
   }
 
-  if (authState === "unauthenticated") {
+  if (state === "unauthenticated") {
     return <LandingPage />;
   }
 
-  if (authState === "error") {
+  if (state === "error") {
     return <BackendDown />;
   }
 

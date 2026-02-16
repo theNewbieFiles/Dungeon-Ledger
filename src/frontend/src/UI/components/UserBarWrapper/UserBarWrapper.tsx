@@ -1,17 +1,23 @@
 import "./UserBarWrapper.css";
-import { authenticated } from "../../../app/core/AuthSystem";
-import { useAuthState } from "../../hooks/useAuthState";
-import { AuthUserMenu } from "../Auth-UserMenu/Auth-UserMenu";
+import { AuthStatus } from "../../../app/core/AuthSystem";
+import { AuthUserMenu } from "../UserMenu-Auth/UserMenu-Auth";
 import { useNavigate } from "react-router-dom";
-import { UnauthUserBar } from "../Unauth-Userbar/Unauth-UserBar";
+import { UnauthUserBar } from "../UserBar-Unauth/UserBar-Unauth";
+import { DungeonLedger } from "../../../app";
 
 export function UserBarWrapper() {
   const navigate = useNavigate();
-  const authState = useAuthState();
+
+  const dl = DungeonLedger.get();
+  const authState = dl.getAuthSystem().getStatus();
+
   return (
     <div className="userbar-container">
-      
-      {authState === authenticated ? <AuthUserMenu /> : <UnauthUserBar />}
+      {authState === AuthStatus.Authenticated ? (
+        <AuthUserMenu />
+      ) : (
+        <UnauthUserBar />
+      )}
     </div>
   );
 }

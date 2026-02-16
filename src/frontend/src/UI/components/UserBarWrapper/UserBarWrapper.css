@@ -1,6 +1,9 @@
 .userbar-container {
     width: 100%; 
     border-bottom: 1px solid #252525;
+
+    color: rgb(189, 189, 189);
+    border-bottom: 1px solid rgb(100, 100, 100);
 }
 
 .userbar {
@@ -15,12 +18,13 @@
 .userbar-left {
     display: flex;
     align-items: center;
+    height: 100%;
     gap: 0.5rem;
 }
 
 .userbar-right {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 1rem;
 }
 

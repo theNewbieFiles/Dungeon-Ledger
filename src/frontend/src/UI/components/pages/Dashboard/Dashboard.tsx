@@ -1,15 +1,14 @@
 
 import { UserBarWrapper } from "../../UserBarWrapper/UserBarWrapper";
+import { PageWrapper } from "../PageWrapper";
 import "./Dashboard.css";
 
 export function Dashboard(){
 
 
     return (
-        <div className="dashboard-page-container page-wrapper">
-            <UserBarWrapper />
-
-            stuff
-        </div>
+        <PageWrapper>
+            Dashboard
+        </PageWrapper>
     )
 } 

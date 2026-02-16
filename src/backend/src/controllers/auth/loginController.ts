@@ -26,7 +26,7 @@ async function loginController(req: Request, res: Response) {
 
         //if login failed
         if (!result.success) {
-            return res.status(200).json({ error: sharedErrors.LOGIN_FAILED }); 
+            return res.status(401).json({ error: sharedErrors.LOGIN_FAILED }); 
         }
 
         //login successful get tokens

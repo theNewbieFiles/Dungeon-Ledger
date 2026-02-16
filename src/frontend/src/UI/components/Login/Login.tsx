@@ -1,26 +1,40 @@
-import { useAuthState } from "../../hooks/useAuthState";
 import { Button } from "../Button/Button";
 import "./Login.css";
 import { useState } from "react";
 
 //backend import
-import dungeonLedger from "../../../app/index";
+import { DungeonLedger } from "../../../app/index";
 
 import { useNavigate } from "react-router-dom";
+import { Events } from "../../../utility/Events";
 
 export function LoginForm() {
+    const dungeonLedger = DungeonLedger.get();
+    const authSystem = dungeonLedger.getAuthSystem();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const authSystem = useAuthState();
     const navigate = useNavigate();
+
+    //buttons
+    let signInBtnDisabled = false;
+
+    const eventBus = dungeonLedger.eventBus;
+
+    eventBus.subscribe(Events.AUTH_LOGIN_FAILED, () => {
+       //indicate login failure to user
+         signInBtnDisabled = false;
+    });
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        dungeonLedger.authSystem.login(email, password);
+        signInBtnDisabled = true;
+
+        authSystem.login(email, password);
     };
 
     const handleSignUp = () => {
-        navigate("/signup")
+        navigate("/signup");
     };
 
     return (
@@ -58,6 +72,7 @@ export function LoginForm() {
                         variant="primary"
                         size="md"
                         onClick={handleLogin}
+                        disabled={signInBtnDisabled}
                     >
                         Log In
                     </Button>

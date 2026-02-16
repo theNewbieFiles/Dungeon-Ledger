@@ -2,6 +2,9 @@ function defineEvents<T extends Record<string, string>>(events: T) {
     return events;
 }
 export const Events = defineEvents({
+    //app
+    APP_READY: "app:ready",
+    APP_FAILED: "app:failed",
     //login
     AUTH_LOGIN_STARTED: "auth:login-started",
     AUTH_LOGIN_SUCCEEDED: "auth:login-succeeded",

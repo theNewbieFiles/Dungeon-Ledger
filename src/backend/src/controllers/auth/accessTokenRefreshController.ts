@@ -5,6 +5,7 @@ import logger from '../../utilities/logger.js';
 import { sharedErrors } from '@dungeon-ledger/shared';
 
 export async function accessTokenRefreshController(req: Request, res: Response) {
+    
     const cookie: RefreshCookie = req.cookies.refreshToken;
 
     //check cookie signature

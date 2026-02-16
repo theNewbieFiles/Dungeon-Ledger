@@ -1,6 +1,6 @@
 import { Button } from "../Button/Button";
 import { Logo } from "../logo/Logo";
-import "./Unauth-UserBar.css";
+import "./UserBar-Unauth.css";
 import { useNavigate } from "react-router-dom";
 
 export function UnauthUserBar() {
@@ -30,3 +30,4 @@ export function UnauthUserBar() {
     </div>
   ); 
 }
+ 

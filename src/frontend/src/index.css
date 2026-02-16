@@ -12,13 +12,16 @@
   --font-weight-button: 600;
   --radius-md: 6px;
   --transition-fast: 0.15s;
+  --font-color: rgb(189, 189, 189);
 
   --page-width: 1280px;
+
 
 }
 
 
 body {
+  color: var(--font-color);
   background-color: #525252;
   margin: 0;
 }

@@ -1,6 +1,6 @@
 import z from "zod";
 
-export function createSystemSettings(rawSettings: ISettings): ISystemSettings {
+export function createSystemSettings(rawSettings: Settings): SystemSettings {
     const schema = z.object({
         apiBaseUrl: z.string(),
         websocketUrl: z.string(),
@@ -10,18 +10,17 @@ export function createSystemSettings(rawSettings: ISettings): ISystemSettings {
         secured: z.boolean(), 
     });
 
-    let settings: ISettings;
+    let settings: Settings;
 
     try {
         settings = schema.parse(rawSettings);
     } catch (error) { 
-        console.error(error); 
-        //throw new Error("Failed Validation")
+        throw new Error("Failed Validation")
      }
 
     //get a setting
-    function get<K extends keyof ISettings>(key: K): ISettings[K] {
-        return settings?.[key];
+    function get<K extends keyof Settings>(key: K): Settings[K] {
+        return settings[key];
     }
 
     return {
@@ -29,9 +28,9 @@ export function createSystemSettings(rawSettings: ISettings): ISystemSettings {
     }
 }
 
-export interface ISystemSettings { get<K extends keyof ISettings>(key: K): ISettings[K]; }
+export interface SystemSettings { get<K extends keyof Settings>(key: K): Settings[K]; }
 
-export interface ISettings {
+export interface Settings {
     apiBaseUrl: string;
     websocketUrl: string;
     secured: boolean;
