@@ -170,16 +170,6 @@ Current focus:
 
 ---
 
-## License
-
-**All rights reserved.**
-
-This repository is intentionally not open-source.  
-The code is provided for viewing and evaluation purposes only.  
-No permission is granted to use, copy, modify, or distribute without explicit written consent.
-
----
-
 ## About the Author
 
 Dungeon Ledger is designed and built by Chris Wilson as a long-term project exploring advanced system design and AI orchestration.
