@@ -182,6 +182,6 @@ No permission is granted to use, copy, modify, or distribute without explicit wr
 
 ## About the Author
 
-Dungeon Ledger is designed and built by **Christopher Wilson** as a long-term project exploring advanced system design and AI orchestration.
+Dungeon Ledger is designed and built by Chris Wilson as a long-term project exploring advanced system design and AI orchestration.
 
 If you are reviewing this project and would like to discuss architecture, design decisions, or implementation details, feel free to reach out.
