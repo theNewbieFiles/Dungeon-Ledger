@@ -165,7 +165,6 @@ Dungeon Ledger is under active development.
 Current focus:
 - Campaign and session state enforcement
 - Orchestration engine MVP
-- One fully implemented agent with a validation loop
 - DM-facing authoring workflows
 
 ---
